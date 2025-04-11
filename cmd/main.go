@@ -1,12 +1,19 @@
 package main
 
 import (
-	"log"
-	"shope_clone/internal/app"
+	"shope_clone/internal/bootstrap"
+	"shope_clone/internal/container"
+	"shope_clone/internal/route"
 )
 
 func main() {
-	if err := app.Bootstrap(); err != nil {
-		log.Fatal(err)
-	}
+	cfg := bootstrap.LoadConfig()
+	db := bootstrap.ConnectDB(cfg)
+
+	ctn := container.NewContainer(cfg, db)
+	server := bootstrap.NewServer(cfg)
+
+	route.SetupRoutes(server.Engine, ctn)
+
+	server.Run()
 }
