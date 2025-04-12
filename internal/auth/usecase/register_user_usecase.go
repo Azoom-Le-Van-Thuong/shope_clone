@@ -26,8 +26,7 @@ func (uc *RegisterUserUseCase) Execute(ctx context.Context, userBody dto.Registe
 	if err != nil {
 		return err
 	}
-	saltRounds := 16
-	password, err := valueobject.NewPassword(passwordRaw, saltRounds)
+	password, err := valueobject.NewPasswordFromPlainText(ctx, passwordRaw)
 	if err != nil {
 		return authdomain.ErrPasswordTooShort
 	}

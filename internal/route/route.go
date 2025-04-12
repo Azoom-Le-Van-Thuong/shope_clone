@@ -11,6 +11,6 @@ func SetupRoutes(r *gin.Engine, ctn *container.Container) {
 	// Register other routes here
 
 	userHandler.RegisterUserRoutes(r, ctn.CreateUserUC, ctn.GetUserUC)
-	authHandler.RegisterAuthRoutes(r, ctn.RegisterUserUseCase)
+	authHandler.RegisterAuthRoutes(r, ctn.RegisterUserUseCase, ctn.LoginUserUseCase)
 
 }

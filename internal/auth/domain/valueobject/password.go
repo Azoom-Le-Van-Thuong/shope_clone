@@ -1,52 +1,70 @@
 package valueobject
 
 import (
+	"context"
 	"crypto/rand"
-	"encoding/hex"
-	"errors"
+	"encoding/base64"
+	"fmt"
 	"golang.org/x/crypto/bcrypt"
 )
 
+const (
+	SaltLength = 16
+	BcryptCost = bcrypt.DefaultCost // Bạn có thể tăng lên nếu muốn
+)
+
 type Password struct {
-	salt   string
-	hashed string
+	salt string
+	hash string
 }
 
-func generateSalt(n int) (string, error) {
-	bytes := make([]byte, n)
-	_, err := rand.Read(bytes)
+// NewPasswordFromPlainText tạo password mới từ plaintext
+func NewPasswordFromPlainText(ctx context.Context, plain string) (*Password, error) {
+	salt, err := generateSalt(SaltLength)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-	return hex.EncodeToString(bytes), nil
-}
 
-func NewPassword(raw string, saltRounds int) (Password, error) {
-	if len(raw) < 6 {
-		return Password{}, errors.New("password too short")
-	}
-	hash, err := bcrypt.GenerateFromPassword([]byte(raw), bcrypt.DefaultCost)
+	hashed, err := bcrypt.GenerateFromPassword([]byte(salt+plain), BcryptCost)
 	if err != nil {
-		return Password{}, err
+		return nil, err
 	}
-	salt, err := generateSalt(saltRounds)
-	if err != nil {
-		return Password{}, err
+
+	return &Password{
+		salt: salt,
+		hash: string(hashed),
+	}, nil
+}
+
+// NewPasswordFromHash tái tạo lại object từ DB
+func NewPasswordFromHash(salt, hash string) *Password {
+	return &Password{
+		salt: salt,
+		hash: hash,
 	}
-	return Password{hashed: string(hash), salt: salt}, nil
 }
 
-func FromHashed(hash string) Password {
-	return Password{hashed: hash}
+// Compare kiểm tra password người dùng nhập có đúng không
+func (p *Password) Compare(ctx context.Context, input string) error {
+	return bcrypt.CompareHashAndPassword([]byte(p.hash), []byte(p.salt+input))
 }
 
-func (p Password) Verify(raw string, salt string) bool {
-	return bcrypt.CompareHashAndPassword([]byte(p.hashed), []byte(raw+salt)) == nil
+// Hash trả về hash để lưu DB
+func (p *Password) Hash() string {
+	return p.hash
 }
 
-func (p Password) Hashed() string {
-	return p.hashed
-}
-func (p Password) Salt() string {
+// Salt trả về salt để lưu DB
+func (p *Password) Salt() string {
 	return p.salt
+}
+
+// Tạo salt ngẫu nhiên
+func generateSalt(length int) (string, error) {
+	buf := make([]byte, length)
+	_, err := rand.Read(buf)
+	if err != nil {
+		return "", fmt.Errorf("failed to generate salt: %w", err)
+	}
+	return base64.RawStdEncoding.EncodeToString(buf), nil
 }

@@ -5,14 +5,14 @@ import "shope_clone/internal/auth/domain/valueobject"
 type UserCredential struct {
 	ID       int
 	Email    valueobject.Email
-	Password valueobject.Password
+	Password *valueobject.Password
 	Name     string
 }
 
 func ToUserAuthCreation(u UserCredential) *UserAuthCreation {
 	return &UserAuthCreation{
 		Name:     u.Name,
-		Password: u.Password.Hashed(),
+		Password: u.Password.Hash(),
 		Salt:     u.Password.Salt(),
 		Email:    u.Email.Value(),
 	}

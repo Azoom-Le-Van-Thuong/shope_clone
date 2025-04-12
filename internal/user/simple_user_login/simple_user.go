@@ -3,9 +3,11 @@ package view
 import "shope_clone/internal/user/domain"
 
 type SimpleUser struct {
-	ID    uint   `json:"id"`
-	Name  string `json:"name"`
-	Email string `json:"email"`
+	ID       uint   `json:"id"`
+	Name     string `json:"name"`
+	Email    string `json:"email"`
+	Password string `json:"-"`
+	Salt     string `json:"-"`
 }
 
 // add Function Table Namme

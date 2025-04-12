@@ -10,12 +10,14 @@ import (
 func RegisterAuthRoutes(
 	r *gin.Engine,
 	registerUC *authUseCase.RegisterUserUseCase,
-
+	loginUC *authUseCase.LoginUseCase,
 ) {
 
 	registerUserHdl := NewRegisterUserHandler(registerUC)
+	loginUserHdl := NewLoginHandler(loginUC)
 	authGroup := r.Group("/auth")
 	{
 		authGroup.POST("/register", registerUserHdl.Handle)
+		authGroup.POST("/login", loginUserHdl.Handle)
 	}
 }
