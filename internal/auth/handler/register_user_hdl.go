@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"shope_clone/internal/auth/dto"
 	authUseCase "shope_clone/internal/auth/usecase"
+	"shope_clone/pkg/errs"
 )
 
 type registerUserHandler struct {
@@ -18,12 +19,12 @@ func NewRegisterUserHandler(uc *authUseCase.RegisterUserUseCase) *registerUserHa
 func (h *registerUserHandler) Handle(c *gin.Context) {
 	var userBody dto.RegisterRequest
 	if err := c.ShouldBindJSON(&userBody); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid payload"})
+		errs.HandleError(c, err)
 		return
 	}
 
 	if err := h.UC.Execute(c.Request.Context(), userBody); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to create user"})
+		errs.HandleError(c, err)
 		return
 	}
 

@@ -2,7 +2,7 @@ package authUseCase
 
 import (
 	"context"
-	"errors"
+	authdomain "shope_clone/internal/auth/domain"
 	"shope_clone/internal/auth/domain/entity"
 	"shope_clone/internal/auth/domain/repository"
 	"shope_clone/internal/auth/domain/valueobject"
@@ -29,13 +29,13 @@ func (uc *RegisterUserUseCase) Execute(ctx context.Context, userBody dto.Registe
 	saltRounds := 16
 	password, err := valueobject.NewPassword(passwordRaw, saltRounds)
 	if err != nil {
-		return err
+		return authdomain.ErrPasswordTooShort
 	}
 
 	userInDb, err := uc.registerUserRepository.FindUserByEmail(ctx, email.Value())
 
 	if userInDb != nil {
-		return errors.New("email already registered")
+		return authdomain.ErrEmailAlreadyExists
 	}
 
 	user := entity.UserCredential{
