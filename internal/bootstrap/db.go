@@ -3,6 +3,7 @@ package bootstrap
 import (
 	"fmt"
 	"log"
+	"shope_clone/internal/user/domain"
 	"time"
 
 	"gorm.io/driver/mysql"
@@ -24,6 +25,7 @@ func ConnectDB(cfg *Config) *Database {
 	}
 
 	sqlDB, err := db.DB()
+	db.AutoMigrate(domain.User{})
 	if err != nil {
 		log.Fatalf("Failed to get sqlDB: %v", err)
 	}

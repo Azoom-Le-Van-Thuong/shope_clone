@@ -2,6 +2,7 @@ package authUseCase
 
 import (
 	"context"
+	"errors"
 	"shope_clone/internal/auth/domain/entity"
 	"shope_clone/internal/auth/domain/repository"
 	"shope_clone/internal/auth/domain/valueobject"
@@ -11,7 +12,7 @@ import (
 type RegisterUserUseCase struct {
 	registerUserRepository domain.RegisterUserRepository
 }
- 
+
 func NewRegisterUserUseCase(userCredentialRepository domain.RegisterUserRepository) *RegisterUserUseCase {
 	return &RegisterUserUseCase{
 		registerUserRepository: userCredentialRepository,
@@ -25,17 +26,16 @@ func (uc *RegisterUserUseCase) Execute(ctx context.Context, userBody dto.Registe
 	if err != nil {
 		return err
 	}
-	password, err := valueobject.NewPassword(passwordRaw)
+	saltRounds := 16
+	password, err := valueobject.NewPassword(passwordRaw, saltRounds)
 	if err != nil {
 		return err
 	}
 
 	userInDb, err := uc.registerUserRepository.FindUserByEmail(ctx, email.Value())
-	if err != nil {
-		return err
-	}
-	if userInDb != nil {
 
+	if userInDb != nil {
+		return errors.New("email already registered")
 	}
 
 	user := entity.UserCredential{
@@ -44,5 +44,5 @@ func (uc *RegisterUserUseCase) Execute(ctx context.Context, userBody dto.Registe
 		Password: password,
 		Name:     userBody.Name,
 	}
-	return uc.registerUserRepository.Insert(ctx, user)
+	return uc.registerUserRepository.Insert(ctx, entity.ToUserAuthCreation(user))
 }

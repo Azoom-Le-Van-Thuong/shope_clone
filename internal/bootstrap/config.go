@@ -18,7 +18,7 @@ func LoadConfig() *Config {
 	}
 
 	return &Config{
-		DBUrl: getEnv("DATABASE_URL", "root:thuong123@tcp(127.0.0.1:3306)/shopee_clone"),
+		DBUrl: getEnv("MYSQL_DATABASE_URL", "xx:xxx@tcp(127.0.0.1:3306)/shopee_clone"),
 		Port:  getEnv("PORT", "8080"),
 	}
 }

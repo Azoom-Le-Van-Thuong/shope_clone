@@ -7,6 +7,6 @@ import (
 )
 
 type RegisterUserRepository interface {
-	Insert(ctx context.Context, user entity.UserCredential) error
+	Insert(ctx context.Context, user *entity.UserAuthCreation) error
 	FindUserByEmail(ctx context.Context, email string) (*view.SimpleUser, error)
 }

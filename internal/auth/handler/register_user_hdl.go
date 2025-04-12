@@ -26,11 +26,6 @@ func (h *registerUserHandler) Handle(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to create user"})
 		return
 	}
-	err := h.UC.Execute(c.Request.Context(), userBody)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to create user"})
-		return
-	}
 
 	c.JSON(http.StatusCreated, gin.H{"message": "user created successfully"})
 }
