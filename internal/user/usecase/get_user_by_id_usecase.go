@@ -1,4 +1,4 @@
-package usecase
+package userUseCase
 
 // Implementation of the GetUser use case
 

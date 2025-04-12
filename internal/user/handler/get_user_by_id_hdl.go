@@ -1,18 +1,19 @@
-package handler
+package userHandler
 
 import (
 	"net/http"
-	"shope_clone/internal/user/usecase"
+	userUseCase "shope_clone/internal/user/usecase"
+
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
 type GetUserByIDHandler struct {
-	UC *usecase.GetUserByIDUseCase
+	UC *userUseCase.GetUserByIDUseCase
 }
 
-func NewGetUserByIDHandler(uc *usecase.GetUserByIDUseCase) *GetUserByIDHandler {
+func NewGetUserByIDHandler(uc *userUseCase.GetUserByIDUseCase) *GetUserByIDHandler {
 	return &GetUserByIDHandler{UC: uc}
 }
 

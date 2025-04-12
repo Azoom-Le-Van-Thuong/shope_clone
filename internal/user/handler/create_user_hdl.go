@@ -1,18 +1,18 @@
-package handler
+package userHandler
 
 import (
 	"net/http"
 	"shope_clone/internal/user/domain"
-	"shope_clone/internal/user/usecase"
+	userUseCase "shope_clone/internal/user/usecase"
 
 	"github.com/gin-gonic/gin"
 )
 
 type CreateUserHandler struct {
-	UC *usecase.CreateUserUseCase
+	UC *userUseCase.CreateUserUseCase
 }
 
-func NewCreateUserHandler(uc *usecase.CreateUserUseCase) *CreateUserHandler {
+func NewCreateUserHandler(uc *userUseCase.CreateUserUseCase) *CreateUserHandler {
 	return &CreateUserHandler{UC: uc}
 }
 

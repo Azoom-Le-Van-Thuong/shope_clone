@@ -1,13 +1,13 @@
-package mysql
+package userSql
 
 import (
 	"gorm.io/gorm"
 )
 
-type UserMySQLRepository struct {
+type userMySQLRepository struct {
 	db *gorm.DB
 }
 
-func NewUserMySQLRepository(db *gorm.DB) *UserMySQLRepository {
-	return &UserMySQLRepository{db: db}
+func NewUserMySQLRepository(db *gorm.DB) *userMySQLRepository {
+	return &userMySQLRepository{db: db}
 }

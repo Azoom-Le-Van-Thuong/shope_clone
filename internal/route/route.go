@@ -2,11 +2,15 @@ package route
 
 import (
 	"github.com/gin-gonic/gin"
+	authHandler "shope_clone/internal/auth/handler"
 	"shope_clone/internal/container"
-	"shope_clone/internal/user/handler"
+	userHandler "shope_clone/internal/user/handler"
 )
 
 func SetupRoutes(r *gin.Engine, ctn *container.Container) {
 	// Register other routes here
-	handler.RegisterUserRoutes(r, ctn.CreateUserUC, ctn.GetUserUC)
+
+	userHandler.RegisterUserRoutes(r, ctn.CreateUserUC, ctn.GetUserUC)
+	authHandler.RegisterAuthRoutes(r, ctn.RegisterUserUseCase)
+
 }

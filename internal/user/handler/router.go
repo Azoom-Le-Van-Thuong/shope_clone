@@ -1,4 +1,4 @@
-package handler
+package userHandler
 
 import (
 	"github.com/gin-gonic/gin"
@@ -7,8 +7,8 @@ import (
 
 func RegisterUserRoutes(
 	r *gin.Engine,
-	createUC *usecase.CreateUserUseCase,
-	getUC *usecase.GetUserByIDUseCase,
+	createUC *userUseCase.CreateUserUseCase,
+	getUC *userUseCase.GetUserByIDUseCase,
 
 ) {
 	getUserHandler := NewGetUserByIDHandler(getUC)
