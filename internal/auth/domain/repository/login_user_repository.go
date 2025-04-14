@@ -2,7 +2,7 @@ package domain
 
 import (
 	"context"
-	"shope_clone/internal/user/simple_user_login"
+	"shope_clone/internal/user/domain/view"
 )
 
 type LoginUserRepository interface {

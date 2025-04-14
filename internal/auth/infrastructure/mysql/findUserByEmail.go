@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"gorm.io/gorm"
-	"shope_clone/internal/user/simple_user_login"
+	"shope_clone/internal/user/domain/view"
 )
 
 func (r *authSQlRepository) FindUserByEmail(ctx context.Context, email string) (*view.SimpleUser, error) {
